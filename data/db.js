@@ -106,9 +106,15 @@ async function syncAndSeed() {
   );
   await Promise.all(
     data.map((restaurant) => {
+      let address = '';
+      if (restaurant.bulding_number !== 'undefined') {
+        address = restaurant.bulding_number + ' ' + restaurant.street.split(' ').filter(w => w !== '').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+      } else {
+        adddress = restaurant.street.split(' ').filter(w => w !== '').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+      }
       Restaurant.create({
-        name: restaurant.doing_business_as_dba.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-        address: restaurant.bulding_number + ' ' + restaurant.street.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+        name: restaurant.restaurant_name.split(' ').filter(w => w !== '').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '),
+        address: address,
         borough_id:  Object.keys(boroughs).find(key => boroughs[key] === restaurant.borough),
         sidewalk_seating: restaurant.approved_for_sidewalk_seating,
         roadway_seating: restaurant.approved_for_roadway_seating,
@@ -123,6 +129,7 @@ Borough.hasMany(Restaurant, {foreignKey: 'borough_id'});
 
 module.exports = {
   syncAndSeed,
+  boroughs,
   models: {
     Restaurant,
     Borough,

@@ -9,13 +9,7 @@ router.get("/", (req, res, next) => {
   router.get("/restaurants", async (req, res, next) => {
     const restaurants = await db.models.Restaurant.findAll();
     const countByBorough = restaurants.reduce((acc, val) => {
-        const boroughs = {
-            1: 'Brooklyn',
-            2: 'Manhattan',
-            3: 'Queens',
-            4: 'Bronx',
-            5: 'Staten Island',
-          };
+      const boroughs = db.boroughs;
       const borough = boroughs[val.borough_id];
       acc[borough] = acc[borough] || 0;
       acc[borough]++;
