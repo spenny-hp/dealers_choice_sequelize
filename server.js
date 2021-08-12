@@ -1,4 +1,4 @@
-const db = require("./db");
+const db = require("./data/db");
 const express = require("express");
 const path = require('path');
 const routes = require("./routes/restaurants");
